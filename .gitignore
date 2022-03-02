@@ -1,0 +1,14 @@
+venv/*
+venv_new/*
+.idea/*
+__pycache__/*
+*/__pycache__/*
+*/*/__pycache__/*
+*/*/*/__pycache__/*
+*/*/*/*/__pycache__/*
+
+/book_API/*/migrations/*
+/book_API/*/migrations
+
+*.pyo
+*.pyc
