@@ -25,7 +25,7 @@ SECRET_KEY = 'django-insecure-p^+04(wqz7yz8917oux2bczmxl6(c2po3)j0=82z6&d5g8+uv-
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['*']
 
 
 # Application definition
@@ -38,6 +38,10 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'rest_framework',
+
+    # apps
+    'tcc_meihelp_backend.core',
+    'tcc_meihelp_backend.company'
 ]
 
 MIDDLEWARE = [
