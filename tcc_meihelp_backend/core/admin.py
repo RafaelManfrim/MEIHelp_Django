@@ -1,6 +1,5 @@
 from django.contrib import admin
-import tcc_meihelp_backend.company.models
+from tcc_meihelp_backend.companies.models import Company
 
 # Register your models here.
-
-admin.site.register(tcc_meihelp_backend.company.models.Company)
+admin.site.register(Company)

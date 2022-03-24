@@ -27,7 +27,7 @@ DEBUG = True
 
 ALLOWED_HOSTS = ['*']
 
-AUTH_USER_MODEL = 'company.company'
+AUTH_USER_MODEL = 'companies.company'
 
 # Application definition
 
@@ -42,7 +42,7 @@ INSTALLED_APPS = [
 
     # apps
     'tcc_meihelp_backend.core',
-    'tcc_meihelp_backend.company'
+    'tcc_meihelp_backend.companies'
 ]
 
 MIDDLEWARE = [

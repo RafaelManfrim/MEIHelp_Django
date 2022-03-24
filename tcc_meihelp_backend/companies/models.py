@@ -5,7 +5,6 @@ from django.contrib.auth.models import PermissionsMixin
 from django.db import models
 
 
-# Create your models here.
 class UserManager(BaseUserManager):
     def _create_user(self, cnpj, corporate_name, fantasy_name, email, phone, password, is_staff, is_superuser, **extra_fields):
         if not cnpj:
