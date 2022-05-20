@@ -35,19 +35,19 @@ class UserManager(BaseUserManager):
 
 
 class Company(AbstractBaseUser, PermissionsMixin):
-    cnpj = models.OneToOneField(CNPJ.cnpj, on_delete=models.CASCADE)
-    corporate_name = models.CharField('Razão social', max_length=100)
+    cnpj_id = models.OneToOneField(CNPJ, on_delete=models.CASCADE)
+    corporate_name = models.CharField('Razão social', max_length=100, unique=True)
     email = models.EmailField('E-mail', max_length=50, unique=False)
     phone = models.CharField('Telefone', max_length=11)
     description = models.TextField('Descrição da MEI', null=True)
-    cep = models.CharField('CEP', max_length=8, validators=[MinLengthValidator(8)])
+    cep = models.CharField('CEP', max_length=8, validators=[MinLengthValidator(8)], unique=False)
     created_at = models.DateTimeField(default=datetime.now(), editable=False)
     updated_at = models.DateTimeField(default=datetime.now())
     is_staff = models.BooleanField("staff status", default=False)
     is_active = models.BooleanField("active", default=True)
 
-    USERNAME_FIELD = 'cnpj'
-    REQUIRED_FIELDS = ['corporate_name', 'email', 'phone']
+    USERNAME_FIELD = 'corporate_name'
+    REQUIRED_FIELDS = ['email', 'phone', 'cep']
 
     objects = UserManager()
 

@@ -1,6 +1,17 @@
+abstract==2021.11.29.1
 asgiref==3.5.0
 backports.zoneinfo==0.2.1
+base32hex==1.0.2
+certifi==2021.10.8
+charset-normalizer==2.0.12
+colouration==2020.7.26
+company==0.0.4
 Django==4.0.3
 djangorestframework==3.13.1
+graphviz==0.19.1
+idna==3.3
+pickle-warehouse==0.1.1
 pytz==2021.3
+requests==2.27.1
 sqlparse==0.4.2
+urllib3==1.26.9
