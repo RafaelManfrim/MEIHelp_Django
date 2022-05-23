@@ -6,12 +6,6 @@ from django.core.validators import MinLengthValidator
 from django.db import models
 
 
-class CNPJ(models.Model):
-    cnpj = models.CharField('CNPJ', max_length=14, validators=[MinLengthValidator(14)], unique=True)
-    updated_at = models.DateField('Atualizado em')
-    isMEI = models.BooleanField('É MEI')
-
-
 class UserManager(BaseUserManager):
     def _create_user(self, cnpj, corporate_name, email, phone, password, is_staff, is_superuser, **extra_fields):
         if not cnpj:
@@ -34,12 +28,18 @@ class UserManager(BaseUserManager):
         return user
 
 
+class CNPJ(models.Model):
+    cnpj = models.CharField('CNPJ', max_length=14, validators=[MinLengthValidator(14)], unique=True, primary_key=True)
+    updated_at = models.DateField('Atualizado em')
+    is_mei = models.BooleanField('É MEI')
+
+
 class Company(AbstractBaseUser, PermissionsMixin):
-    cnpj_id = models.OneToOneField(CNPJ, on_delete=models.CASCADE)
-    corporate_name = models.CharField('Razão social', max_length=100, unique=True)
+    cnpj = models.OneToOneField(CNPJ, on_delete=models.CASCADE)
     email = models.EmailField('E-mail', max_length=50, unique=False)
     phone = models.CharField('Telefone', max_length=11)
     description = models.TextField('Descrição da MEI', null=True)
+    corporate_name = models.CharField('Razão social', max_length=100, unique=True)
     cep = models.CharField('CEP', max_length=8, validators=[MinLengthValidator(8)], unique=False)
     created_at = models.DateTimeField(default=datetime.now(), editable=False)
     updated_at = models.DateTimeField(default=datetime.now())

@@ -1,48 +1,71 @@
-import requests
 from datetime import datetime
 
-from rest_framework import viewsets
+from rest_framework import viewsets, status
 from rest_framework.decorators import action
 from rest_framework.response import Response
 
-from tcc_meihelp_backend.companies.models import CNPJ
+from tcc_meihelp_backend.companies.functions import fetch_cnpj
+from tcc_meihelp_backend.companies.models import CNPJ, Company
 
 
 class CNPJViewset(viewsets.ViewSet):
+
     @action(methods=['POST'], detail=False)
     def validate(self, request):
         request_cnpj = request.data.get('cnpj')
 
         try:
-            # Verificar se o cnpj já existe no banco
             cnpj = CNPJ.objects.get(cnpj=request_cnpj)
-            # return Response({'cnpj': cnpj})
-            # Verificar se updated_at foi atualizado a mais de 30 dias
+
             if abs((cnpj.updated_at - datetime.now()).days) > 30:
-                print('Entrou aqui')
-                # Atualizar dados referentes ao CNPJ
-                # Validar se é MEI
-                # Salvar no banco
+                novos_dados, status_code = fetch_cnpj(request_cnpj)
+                if status_code == status.HTTP_200_OK:
+                    cnpj.updated_at = novos_dados['updated_at']
+                    cnpj.is_mei = novos_dados['is_mei']
+                    cnpj.save()
+
+                    if cnpj.is_mei:
+                        return Response(status=status.HTTP_200_OK)
+                    else:
+                        return Response(status=status.HTTP_401_UNAUTHORIZED)
+                else:
+                    return Response(status=status_code)
+
             else:
-                print('Entrou aqui 2')
-                # Se não, utilizar os dados do banco
+                if cnpj.is_mei:
+                    return Response(status=status.HTTP_200_OK)
+                else:
+                    return Response(status=status.HTTP_401_UNAUTHORIZED)
+
         except CNPJ.DoesNotExist:
-            response = requests.get('https://receitaws.com.br/v1/cnpj/' + request_cnpj)
-            data = response.json()
+            novos_dados, status_code = fetch_cnpj(request_cnpj)
+            if status_code == status.HTTP_200_OK:
+                novo_cnpj = CNPJ.objects.create(**novos_dados)
 
-            infos = {
-                'cep': data['cep'],
-                'corporate_name': data['nome'],
-                'cnpj': data['cnpj']
-            }
+                if novo_cnpj.is_mei:
+                    return Response(status=status.HTTP_200_OK)
+                else:
+                    return Response(status=status.HTTP_401_UNAUTHORIZED)
+            else:
+                return Response(status=status_code)
 
-            if data['natureza_juridica'].startswith('213-5'):
-                infos['isMEI'] = True
-            return Response(data)
-            # Buscar dados referentes ao CNPJ
-            # Validar se é MEI
-            # Salvar no banco
 
-        # Se for uma MEI Válida, retornar os dados para o front, se não, retornar um erro avisando
+class CompanyViewset(viewsets.ModelViewSet):
 
-        # return Response({'cnpj': response})
+    def list(self):
+        return Response(status=status.HTTP_403_FORBIDDEN)
+
+    def retrieve(self):
+        return Response(status=status.HTTP_403_FORBIDDEN)
+
+    def update(self):
+        return Response(status=status.HTTP_403_FORBIDDEN)
+
+    def partial_update(self):
+        return Response({})
+
+    def create(self):
+        return Response({})
+
+    def destroy(self):
+        return Response({})
