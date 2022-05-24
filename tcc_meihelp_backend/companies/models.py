@@ -30,7 +30,7 @@ class UserManager(BaseUserManager):
 
 class CNPJ(models.Model):
     cnpj = models.CharField('CNPJ', max_length=14, validators=[MinLengthValidator(14)], unique=True, primary_key=True)
-    updated_at = models.DateField('Atualizado em')
+    updated_at = models.DateTimeField('Atualizado em')
     is_mei = models.BooleanField('É MEI')
 
 

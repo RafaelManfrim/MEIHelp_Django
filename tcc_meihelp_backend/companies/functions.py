@@ -12,6 +12,8 @@ def fetch_cnpj(cnpj):
 
         if response.status_code == 200:
             data = response.json()
+            if data['status'] == 'ERROR':
+                return None, 400
 
             cnpj_data = {
                 'cnpj': cnpj,
@@ -33,11 +35,13 @@ def fetch_cnpj(cnpj):
 
 
 def validate_cnpj(request_cnpj):
-    # Pode retornar 200, 401, 429, 500 e 504
+    # Pode retornar 200, 400, 401, 429, 500 e 504
     try:
         cnpj = CNPJ.objects.get(cnpj=request_cnpj)
 
-        if abs((cnpj.updated_at - datetime.now()).days) > 30:
+        last_cnpj_fetch = cnpj.updated_at.replace(tzinfo=None)
+
+        if abs((last_cnpj_fetch - datetime.now()).days) > 30:
             novos_dados, status_code = fetch_cnpj(request_cnpj)
             if status_code == status.HTTP_200_OK:
                 cnpj.updated_at = novos_dados['updated_at']
