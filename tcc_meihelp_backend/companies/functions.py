@@ -1,6 +1,9 @@
+import requests
 from datetime import datetime
 
-import requests
+from rest_framework import status
+
+from tcc_meihelp_backend.companies.models import CNPJ
 
 
 def fetch_cnpj(cnpj):
@@ -27,3 +30,41 @@ def fetch_cnpj(cnpj):
 
     except requests.exceptions.RequestException:
         return None, 500
+
+
+def validate_cnpj(request_cnpj):
+    # Pode retornar 200, 401, 429, 500 e 504
+    try:
+        cnpj = CNPJ.objects.get(cnpj=request_cnpj)
+
+        if abs((cnpj.updated_at - datetime.now()).days) > 30:
+            novos_dados, status_code = fetch_cnpj(request_cnpj)
+            if status_code == status.HTTP_200_OK:
+                cnpj.updated_at = novos_dados['updated_at']
+                cnpj.is_mei = novos_dados['is_mei']
+                cnpj.save()
+
+                if cnpj.is_mei:
+                    return status.HTTP_200_OK
+                else:
+                    return status.HTTP_401_UNAUTHORIZED
+            else:
+                return status_code
+
+        else:
+            if cnpj.is_mei:
+                return status.HTTP_200_OK
+            else:
+                return status.HTTP_401_UNAUTHORIZED
+
+    except CNPJ.DoesNotExist:
+        novos_dados, status_code = fetch_cnpj(request_cnpj)
+        if status_code == status.HTTP_200_OK:
+            novo_cnpj = CNPJ.objects.create(**novos_dados)
+
+            if novo_cnpj.is_mei:
+                return status.HTTP_200_OK
+            else:
+                return status.HTTP_401_UNAUTHORIZED
+        else:
+            return status_code
