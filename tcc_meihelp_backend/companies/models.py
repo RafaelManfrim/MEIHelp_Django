@@ -7,21 +7,22 @@ from django.db import models
 
 
 class UserManager(BaseUserManager):
-    def _create_user(self, cnpj, corporate_name, email, phone, password, is_staff, is_superuser, **extra_fields):
+    def _create_user(self, cnpj, corporate_name, cep, email, phone, password, is_staff, is_superuser, **extra_fields):
         if not cnpj:
             raise ValueError('CNPJ é obrigatório')
         email = self.normalize_email(email)
-        user = self.model(cnpj=cnpj, corporate_name=corporate_name, email=email, phone=phone,
+        user = self.model(cnpj=cnpj, corporate_name=corporate_name, cep=cep, email=email, phone=phone,
                           password=password, is_staff=is_staff, is_superuser=is_superuser, **extra_fields)
         user.set_password(password)
         user.save(using=self._db)
         return user
 
-    def create_user(self, cnpj, corporate_name, email, phone, password, **extra_fields):
-        return self._create_user(cnpj, corporate_name, email, phone, password, False, False, **extra_fields)
+    def create_user(self, cnpj, corporate_name, cep, email, phone, password, **extra_fields):
+        return self._create_user(cnpj, corporate_name, cep, email, phone, password, False, False, **extra_fields)
 
-    def create_superuser(self, cnpj, corporate_name, email, phone, password, **extra_fields):
-        user = self._create_user(cnpj, corporate_name, email, phone, password, True, True, **extra_fields)
+    def create_superuser(self, cnpj, corporate_name, cep, email, phone, password, **extra_fields):
+        cnpj_banco = CNPJ.objects.get(cnpj=cnpj)
+        user = self._create_user(cnpj_banco, corporate_name, cep, email, phone, password, True, True, **extra_fields)
         user.is_active = True
         user.is_admin = True
         user.save(using=self._db)
@@ -32,6 +33,10 @@ class CNPJ(models.Model):
     cnpj = models.CharField('CNPJ', max_length=14, validators=[MinLengthValidator(14)], unique=True, primary_key=True)
     updated_at = models.DateTimeField('Atualizado em')
     is_mei = models.BooleanField('É MEI')
+
+    class Meta:
+        verbose_name = 'CNPJ'
+        verbose_name_plural = 'CNPJ'
 
 
 class Company(AbstractBaseUser, PermissionsMixin):
@@ -46,8 +51,8 @@ class Company(AbstractBaseUser, PermissionsMixin):
     is_staff = models.BooleanField("staff status", default=False)
     is_active = models.BooleanField("active", default=True)
 
-    USERNAME_FIELD = 'corporate_name'
-    REQUIRED_FIELDS = ['email', 'phone', 'cep']
+    USERNAME_FIELD = 'cnpj'
+    REQUIRED_FIELDS = ['corporate_name', 'email', 'phone', 'cep']
 
     objects = UserManager()
 

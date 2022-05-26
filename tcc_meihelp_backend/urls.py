@@ -17,10 +17,11 @@ from django.contrib import admin
 from django.urls import path, include
 from rest_framework import routers
 
-from tcc_meihelp_backend.companies.API.viewsets import CNPJViewset
+from tcc_meihelp_backend.companies.API.viewsets import CNPJViewset, CompanyViewset
 
 router = routers.SimpleRouter()
 router.register(r'cnpj', CNPJViewset, basename='CNPJ')
+router.register(r'companies', CompanyViewset, basename='Company')
 
 urlpatterns = [
     path('admin/', admin.site.urls),
