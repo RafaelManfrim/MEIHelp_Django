@@ -5,9 +5,11 @@ from datetime import datetime
 from rest_framework import viewsets, status
 from rest_framework.decorators import action
 from rest_framework.response import Response
+from rest_framework_simplejwt.views import TokenObtainPairView
 
+from tcc_meihelp_backend.companies.API.serializers import CompanyTokenObtainPairSerializer, CompaniesSerializer
 from tcc_meihelp_backend.companies.functions import validate_cnpj
-from tcc_meihelp_backend.companies.models import Company, CNPJ, UserManager
+from tcc_meihelp_backend.companies.models import Company, CNPJ
 
 
 class CNPJViewset(viewsets.ViewSet):
@@ -19,18 +21,20 @@ class CNPJViewset(viewsets.ViewSet):
         return Response(status=status_validacao)
 
 
-class CompanyViewset(viewsets.ModelViewSet):
+class CompanyViewset(viewsets.ViewSet):
+    @action(methods=['GET'], detail=False)
+    def all(self, request):
+        try:
+            companies = Company.objects.all()
+            print(companies)
+        except Company.DoesNotExist:
+            return Response(status=status.HTTP_400_BAD_REQUEST)
 
-    def list(self, request, *args, **kwargs):
-        return Response(status=status.HTTP_403_FORBIDDEN)
+        serializer = CompaniesSerializer(companies)
+        return Response(serializer.data)
 
-    def retrieve(self, request, *args, **kwargs):
-        return Response(status=status.HTTP_403_FORBIDDEN)
-
-    def update(self, request, *args, **kwargs):
-        return Response(status=status.HTTP_403_FORBIDDEN)
-
-    def create(self, request, *args, **kwargs):
+    @action(methods=['POST'], detail=False)
+    def register(self, request):
         request_cnpj = request.data.get('cnpj')
 
         dados = {
@@ -49,7 +53,9 @@ class CompanyViewset(viewsets.ModelViewSet):
                 if data['status'] == 'ERROR':
                     return Response(status=status.HTTP_400_BAD_REQUEST)
 
-                dados['cep'] = data['cep']
+                dados['cep'] = data['cep'].replace(".", "").replace("-", "")
+                dados['uf'] = data['uf']
+                dados['city'] = data['municipio']
                 dados['corporate_name'] = data['nome']
 
             if response.status_code == 429 or response.status_code == 504:
@@ -68,8 +74,58 @@ class CompanyViewset(viewsets.ModelViewSet):
 
         return Response(status=status.HTTP_201_CREATED)
 
-    def partial_update(self, request, *args, **kwargs):
-        return Response({})
+    @action(methods=['GET'], detail=False)
+    def full_data(self, request):
+        company_id = request.query_params.get('id')
 
-    def destroy(self, request, *args, **kwargs):
-        return Response({})
+        try:
+            company = Company.objects.get(id=company_id)
+
+            data = {
+                'corporate_name': company.corporate_name,
+                'description': company.description,
+                'cep': company.cep,
+                'phone': company.phone,
+                'email': company.email,
+            }
+        except Company.DoesNotExist:
+            return Response(status=status.HTTP_400_BAD_REQUEST)
+
+        return Response(data)
+
+    @action(methods=['PATCH'], detail=False)
+    def update_data(self, request):
+        print(request)
+        email = request.data.get('email')
+        phone = request.data.get('phone')
+        description = request.data.get('description')
+        cep = request.data.get('cep')
+        company_id = request.data.get('id')
+
+        try:
+            company = Company.objects.get(id=company_id)
+            company.email = email
+            company.phone = phone
+            company.description = description
+            company.cep = cep
+            company.save()
+        except:
+            return Response(status=status.HTTP_400_BAD_REQUEST)
+
+        return Response()
+
+    @action(methods=['DELETE'], detail=False)
+    def delete(self, request):
+        company_id = request.data.get('id')
+
+        try:
+            company = Company.objects.get(id=company_id)
+            company.delete()
+        except Company.DoesNotExist:
+            return Response(status=status.HTTP_400_BAD_REQUEST)
+
+        return Response()
+
+
+class CompanyTokenObtainPairView(TokenObtainPairView):
+    serializer_class = CompanyTokenObtainPairSerializer
