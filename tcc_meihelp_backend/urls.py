@@ -22,9 +22,8 @@ from tcc_meihelp_backend.companies.API.viewsets import CNPJViewset, CompanyViews
 
 router = routers.SimpleRouter()
 router.register(r'cnpj', CNPJViewset, basename='CNPJ')
+router.register(r'companies', CompanyViewset, basename='Company')
 
-authenticated_routes = routers.SimpleRouter()
-authenticated_routes.register(r'companies', CompanyViewset, basename='Company')
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -32,5 +31,4 @@ urlpatterns = [
     path('api/', include(router.urls)),
     path('api/login/', CompanyTokenObtainPairView.as_view(), name='token_obtain_pair'),
     path('api/token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
-    path('api/', include(authenticated_routes.urls))
 ]
