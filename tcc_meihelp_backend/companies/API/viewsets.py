@@ -2,8 +2,10 @@ import requests
 
 from datetime import datetime
 
+from django.db.models import Q
 from rest_framework import viewsets, status
-from rest_framework.decorators import action
+from rest_framework.decorators import action, permission_classes
+from rest_framework.permissions import AllowAny
 from rest_framework.response import Response
 from rest_framework_simplejwt.views import TokenObtainPairView
 
@@ -13,6 +15,7 @@ from tcc_meihelp_backend.companies.models import Company, CNPJ
 
 
 class CNPJViewset(viewsets.ViewSet):
+    permission_classes = [AllowAny]
 
     @action(methods=['POST'], detail=False)
     def validate(self, request):
@@ -24,16 +27,12 @@ class CNPJViewset(viewsets.ViewSet):
 class CompanyViewset(viewsets.ViewSet):
     @action(methods=['GET'], detail=False)
     def all(self, request):
-        try:
-            companies = Company.objects.all()
-            print(companies)
-        except Company.DoesNotExist:
-            return Response(status=status.HTTP_400_BAD_REQUEST)
-
-        serializer = CompaniesSerializer(companies)
+        user = request.user
+        companies = Company.objects.filter(description__isnull=False).filter(~Q(id=user.id))
+        serializer = CompaniesSerializer(companies, many=True)
         return Response(serializer.data)
 
-    @action(methods=['POST'], detail=False)
+    @action(methods=['POST'], detail=False, permission_classes=[AllowAny])
     def register(self, request):
         request_cnpj = request.data.get('cnpj')
 
@@ -76,53 +75,38 @@ class CompanyViewset(viewsets.ViewSet):
 
     @action(methods=['GET'], detail=False)
     def full_data(self, request):
-        company_id = request.query_params.get('id')
+        company = request.user
 
-        try:
-            company = Company.objects.get(id=company_id)
-
-            data = {
-                'corporate_name': company.corporate_name,
-                'description': company.description,
-                'cep': company.cep,
-                'phone': company.phone,
-                'email': company.email,
-            }
-        except Company.DoesNotExist:
-            return Response(status=status.HTTP_400_BAD_REQUEST)
+        data = {
+            'corporate_name': company.corporate_name,
+            'description': company.description,
+            'cep': company.cep,
+            'phone': company.phone,
+            'email': company.email,
+        }
 
         return Response(data)
 
     @action(methods=['PATCH'], detail=False)
     def update_data(self, request):
-        print(request)
         email = request.data.get('email')
         phone = request.data.get('phone')
         description = request.data.get('description')
         cep = request.data.get('cep')
-        company_id = request.data.get('id')
 
-        try:
-            company = Company.objects.get(id=company_id)
-            company.email = email
-            company.phone = phone
-            company.description = description
-            company.cep = cep
-            company.save()
-        except:
-            return Response(status=status.HTTP_400_BAD_REQUEST)
+        company = request.user
+
+        company.email = email
+        company.phone = phone
+        company.description = description
+        company.cep = cep
+        company.save()
 
         return Response()
 
     @action(methods=['DELETE'], detail=False)
     def delete(self, request):
-        company_id = request.data.get('id')
-
-        try:
-            company = Company.objects.get(id=company_id)
-            company.delete()
-        except Company.DoesNotExist:
-            return Response(status=status.HTTP_400_BAD_REQUEST)
+        request.user.delete()
 
         return Response()
 

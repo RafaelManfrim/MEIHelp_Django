@@ -45,7 +45,7 @@ class Company(AbstractBaseUser, PermissionsMixin):
     phone = models.CharField('Telefone', max_length=11)
     description = models.TextField('Descrição da MEI', null=True, blank=True)
     corporate_name = models.CharField('Razão social', max_length=100, unique=True)
-    city = models.CharField('Cidade:', max_length=80)
+    city = models.CharField('Cidade', max_length=80)
     cep = models.CharField('CEP', max_length=8, validators=[MinLengthValidator(8)], unique=False)
     uf = models.CharField('UF', max_length=2, validators=[MinLengthValidator(2)], unique=False)
     created_at = models.DateTimeField(default=datetime.now(), editable=False)

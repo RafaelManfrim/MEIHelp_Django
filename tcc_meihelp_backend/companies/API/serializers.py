@@ -5,11 +5,11 @@ from tcc_meihelp_backend.companies.functions import validate_cnpj
 from tcc_meihelp_backend.companies.models import Company
 
 
-class CompaniesSerializer(serializers.Serializer):
+class CompaniesSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Company
-        fields = '__all__'
+        fields = ['corporate_name', 'description', 'email', 'phone', 'city', 'cep', 'uf', 'cnpj']
 
 
 class CompanyTokenObtainPairSerializer(TokenObtainPairSerializer):
