@@ -18,12 +18,14 @@ from django.urls import path, include
 from rest_framework import routers
 from rest_framework_simplejwt.views import TokenRefreshView
 
+from tcc_meihelp_backend.activities.API.viewsets import ActivityViewset
 from tcc_meihelp_backend.companies.API.viewsets import CNPJViewset, CompanyViewset, CompanyTokenObtainPairView
 
 router = routers.SimpleRouter()
 router.register(r'cnpj', CNPJViewset, basename='CNPJ')
 router.register(r'companies', CompanyViewset, basename='Company')
-
+router.register(r'activities', ActivityViewset, basename='Activity')
+# router.register(r'trainings', Trainings)
 
 urlpatterns = [
     path('admin/', admin.site.urls),

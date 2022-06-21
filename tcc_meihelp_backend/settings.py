@@ -33,7 +33,9 @@ INSTALLED_APPS = [
     'rest_framework',
     'rest_framework_simplejwt',
     'tcc_meihelp_backend.core',
-    'tcc_meihelp_backend.companies'
+    'tcc_meihelp_backend.companies',
+    'tcc_meihelp_backend.activities',
+    'tcc_meihelp_backend.trainings'
 ]
 
 MIDDLEWARE = [
