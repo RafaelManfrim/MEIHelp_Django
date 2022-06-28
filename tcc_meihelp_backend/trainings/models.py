@@ -6,7 +6,7 @@ from django.db import models
 class Training(models.Model):
     url = models.CharField('URL do vídeo', max_length=1028)
     title = models.CharField('Nome do vídeo', max_length=32)
-    description = models.TextField('Descrição do vídeo')
+    description = models.TextField('Descrição do vídeo', null=True, blank=True)
     created_at = models.DateTimeField(default=datetime.now(), editable=False)
     updated_at = models.DateTimeField(default=datetime.now())
 

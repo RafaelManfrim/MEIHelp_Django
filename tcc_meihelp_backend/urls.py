@@ -20,12 +20,13 @@ from rest_framework_simplejwt.views import TokenRefreshView
 
 from tcc_meihelp_backend.activities.API.viewsets import ActivityViewset
 from tcc_meihelp_backend.companies.API.viewsets import CNPJViewset, CompanyViewset, CompanyTokenObtainPairView
+from tcc_meihelp_backend.trainings.API.viewsets import TrainingViewset
 
 router = routers.SimpleRouter()
 router.register(r'cnpj', CNPJViewset, basename='CNPJ')
 router.register(r'companies', CompanyViewset, basename='Company')
 router.register(r'activities', ActivityViewset, basename='Activity')
-# router.register(r'trainings', Trainings)
+router.register(r'trainings', TrainingViewset, basename='Training')
 
 urlpatterns = [
     path('admin/', admin.site.urls),
