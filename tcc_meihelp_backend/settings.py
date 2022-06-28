@@ -35,7 +35,10 @@ INSTALLED_APPS = [
     'tcc_meihelp_backend.core',
     'tcc_meihelp_backend.companies',
     'tcc_meihelp_backend.activities',
-    'tcc_meihelp_backend.trainings'
+    'tcc_meihelp_backend.trainings',
+    'tcc_meihelp_backend.taxes',
+    'tcc_meihelp_backend.inventory',
+    'tcc_meihelp_backend.finances'
 ]
 
 MIDDLEWARE = [
