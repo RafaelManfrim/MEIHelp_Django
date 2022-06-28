@@ -32,6 +32,8 @@ class ActivityViewset(viewsets.ModelViewSet):
             'forecast_date': forecast_date,
             'finished': False,
             'company_id': company,
+            'created_at': datetime.now(),
+            'updated_at': datetime.now(),
         }
 
         activity = Activity(**data)
