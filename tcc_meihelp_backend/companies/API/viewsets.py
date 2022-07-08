@@ -15,9 +15,7 @@ from tcc_meihelp_backend.companies.models import Company, CNPJ
 
 
 class CNPJViewset(viewsets.ViewSet):
-    permission_classes = [AllowAny]
-
-    @action(methods=['POST'], detail=False)
+    @action(methods=['POST'], detail=False, permission_classes=[AllowAny])
     def validate(self, request):
         request_cnpj = request.data.get('cnpj')
         status_validacao = validate_cnpj(request_cnpj)

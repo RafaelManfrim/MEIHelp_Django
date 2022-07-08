@@ -9,7 +9,7 @@ class CompaniesSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Company
-        fields = ['corporate_name', 'description', 'email', 'phone', 'city', 'cep', 'uf', 'cnpj']
+        fields = ['id', 'corporate_name', 'description', 'email', 'phone', 'city', 'cep', 'uf', 'cnpj']
 
 
 class CompanyTokenObtainPairSerializer(TokenObtainPairSerializer):
