@@ -6,7 +6,7 @@ from tcc_meihelp_backend.companies.models import Company
 
 
 class Activity(models.Model):
-    company_id = models.ForeignKey(Company, on_delete=models.CASCADE)
+    company = models.ForeignKey(Company, on_delete=models.CASCADE)
     title = models.CharField('Título', max_length=32)
     description = models.TextField('Descrição do compromisso', null=True, blank=True)
     finished = models.BooleanField('Finalizado')

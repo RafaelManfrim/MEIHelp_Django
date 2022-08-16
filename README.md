@@ -66,3 +66,17 @@
 **Requisitos Funcionais**
 - [ ] Deve ser possível gerar relatórios diários, semanais, mensais e anuais de vendas e compras
 - [ ] Deve ser possível gerar gráficos de receitas, despesas e lucros
+
+
+## Stock
+
+- [ ] Deverá ser possível listar os estoques criados por um usuário, na listagem deverá vir todos os produtos nesse estoque, e seus respectivos fornecedores
+- [ ] O nome do estoque poderá ser editado
+- [ ] Deverá ser possível Excluir um estoque
+- [ ] Deverá ser possível adicionar e remover produtos de um estoque
+- [ ] Deverá ser possível listar os produtos cadastrados por uma empresa
+- [ ] Deverá ser possível cadastrar e editar um produto
+- [ ] Deverá ser possível modificar a quantidade de um produto do estoque
+- [ ] Deverá ser possível cadastrar e remover fornecedores de um produto
+- [ ] Deverá ser possivel listar os fornecedores
+- [ ] Deverá ser possível editar os dados de um fornecedor
