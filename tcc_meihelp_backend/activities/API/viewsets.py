@@ -12,7 +12,7 @@ class ActivityViewset(viewsets.ModelViewSet):
     serializer_class = ActivitySerializer
 
     def list(self, request, *args, **kwargs):
-        activity = Activity.objects.filter(company_id=request.user)
+        activity = Activity.objects.filter(company=request.user)
         serializer = ActivitySerializer(activity, many=True)
         return Response(serializer.data)
 
@@ -31,7 +31,7 @@ class ActivityViewset(viewsets.ModelViewSet):
             'description': description,
             'forecast_date': forecast_date,
             'finished': False,
-            'company_id': company,
+            'company': company,
             'created_at': datetime.now(),
             'updated_at': datetime.now(),
         }

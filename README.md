@@ -70,9 +70,10 @@
 
 ## Stock
 
-- [ ] Deverá ser possível listar os estoques criados por um usuário, na listagem deverá vir todos os produtos nesse estoque, e seus respectivos fornecedores
-- [ ] O nome do estoque poderá ser editado
-- [ ] Deverá ser possível Excluir um estoque
+- [X] Deve ser possível criar um estoque
+- [X] Deverá ser possível listar os estoques criados por um usuário, na listagem deverá vir todos os produtos nesse estoque, e seus respectivos fornecedores
+- [X] O nome do estoque poderá ser editado
+- [X] Deverá ser possível Excluir um estoque
 - [ ] Deverá ser possível adicionar e remover produtos de um estoque
 - [ ] Deverá ser possível listar os produtos cadastrados por uma empresa
 - [ ] Deverá ser possível cadastrar e editar um produto
