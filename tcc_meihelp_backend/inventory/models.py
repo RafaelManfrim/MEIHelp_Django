@@ -47,6 +47,7 @@ class Product(models.Model):
     name = models.CharField(max_length=100)
     category = models.PositiveSmallIntegerField('Categoria', choices=ProductCategory.choices)
     description = models.TextField(max_length=100)
+    created_by = models.ForeignKey(Company, on_delete=models.CASCADE)
     providers = models.ManyToManyField('Provider', through='ProviderProducts')
 
     def __str__(self):

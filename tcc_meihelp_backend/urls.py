@@ -1,18 +1,3 @@
-"""tcc_meihelp_backend URL Configuration
-
-The `urlpatterns` list routes URLs to views. For more information please see:
-    https://docs.djangoproject.com/en/3.2/topics/http/urls/
-Examples:
-Function views
-    1. Add an import:  from my_app import views
-    2. Add a URL to urlpatterns:  path('', views.home, name='home')
-Class-based views
-    1. Add an import:  from other_app.views import Home
-    2. Add a URL to urlpatterns:  path('', Home.as_view(), name='home')
-Including another URLconf
-    1. Import the include() function: from django.urls import include, path
-    2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
-"""
 from django.contrib import admin
 from django.urls import path, include
 from rest_framework import routers
@@ -20,7 +5,8 @@ from rest_framework_simplejwt.views import TokenRefreshView
 
 from tcc_meihelp_backend.activities.API.viewsets import ActivityViewset
 from tcc_meihelp_backend.companies.API.viewsets import CNPJViewset, CompanyViewset, CompanyTokenObtainPairView
-from tcc_meihelp_backend.inventory.API.viewsets import InventoryViewset
+from tcc_meihelp_backend.inventory.API.viewsets import InventoryViewset, ProductViewset, ProviderViewset, \
+    StockProductViewset
 from tcc_meihelp_backend.trainings.API.viewsets import TrainingViewset
 
 router = routers.SimpleRouter()
@@ -29,9 +15,10 @@ router.register(r'companies', CompanyViewset, basename='Company')
 router.register(r'activities', ActivityViewset, basename='Activity')
 router.register(r'trainings', TrainingViewset, basename='Training')
 router.register(r'stocks', InventoryViewset, basename='Stock')
+router.register(r'products', ProductViewset, basename='Product')
+router.register(r'providers', ProviderViewset, basename='Provider')
+router.register(r'stock_product', StockProductViewset, basename='StockProduct')
 # router.register(r'das')
-# router.register(r'products')
-# router.register(r'providers')
 # router.register(r'dre')
 # router.register(r'cashflow')
 # router.register(r'reports')

@@ -74,10 +74,11 @@
 - [X] Deverá ser possível listar os estoques criados por um usuário, na listagem deverá vir todos os produtos nesse estoque, e seus respectivos fornecedores
 - [X] O nome do estoque poderá ser editado
 - [X] Deverá ser possível Excluir um estoque
-- [ ] Deverá ser possível adicionar e remover produtos de um estoque
-- [ ] Deverá ser possível listar os produtos cadastrados por uma empresa
-- [ ] Deverá ser possível cadastrar e editar um produto
-- [ ] Deverá ser possível modificar a quantidade de um produto do estoque
+- [X] Deverá ser possível cadastrar e editar um produto
+- [X] Deverá ser possível adicionar e remover produtos de um estoque
+- [X] Deverá ser possível listar os produtos cadastrados por uma empresa
+- [X] Deverá ser possível modificar a quantidade de um produto do estoque
 - [ ] Deverá ser possível cadastrar e remover fornecedores de um produto
-- [ ] Deverá ser possivel listar os fornecedores
-- [ ] Deverá ser possível editar os dados de um fornecedor
+- [X] Deverá ser possivel listar os fornecedores
+- [X] Deverá ser possível editar os dados de um fornecedor
+- [X] Deverá ser possível excluir um fornecedor
