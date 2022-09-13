@@ -4,7 +4,8 @@ from rest_framework import viewsets, status
 from rest_framework.decorators import action
 from rest_framework.response import Response
 
-from tcc_meihelp_backend.inventory.API.serializers import StockSerializer, ProductSerializer, ProviderSerializer
+from tcc_meihelp_backend.inventory.API.serializers import StockSerializer, ProductSerializer, ProviderSerializer, \
+    StockProductSerializer
 from tcc_meihelp_backend.inventory.models import Stock, StockProduct, ProviderProducts, Product, Provider
 
 
@@ -130,11 +131,11 @@ class ProviderViewset(viewsets.ModelViewSet):
 
 
 class StockProductViewset(viewsets.ViewSet):
-    @action(detail=True, methods=['post'])
+    @action(detail=False, methods=['post'])
     def add_product(self, request):
         stock_id = request.data.get('stock_id')
         product_id = request.data.get('product_id')
-        quantity = request.data.get('quantity')
+        quantity = int(request.data.get('quantity'))
 
         if not product_id or not quantity or not stock_id:
             return Response(status=status.HTTP_400_BAD_REQUEST)
@@ -145,17 +146,18 @@ class StockProductViewset(viewsets.ViewSet):
         try:
             stock_product = StockProduct.objects.get(stock=stock, product=product)
             stock_product.quantity += quantity
+            stock_product.save()
         except StockProduct.DoesNotExist:
             stock_product = StockProduct.objects.create(stock=stock, product=product, quantity=quantity)
 
-        serializer = StockSerializer(stock_product)
+        serializer = StockProductSerializer(stock_product)
         return Response(serializer.data)
 
-    @action(detail=True, methods=['post'])
+    @action(detail=False, methods=['post'])
     def decrease_product_quantity(self, request):
         stock_id = request.data.get('stock_id')
         product_id = request.data.get('product_id')
-        quantity = request.data.get('quantity')
+        quantity = int(request.data.get('quantity'))
 
         if not product_id or not quantity or not stock_id:
             return Response(status=status.HTTP_400_BAD_REQUEST)
@@ -168,13 +170,14 @@ class StockProductViewset(viewsets.ViewSet):
             if stock_product.quantity - quantity < 0:
                 return Response(status=status.HTTP_400_BAD_REQUEST)
             stock_product.quantity -= quantity
+            stock_product.save()
         except StockProduct.DoesNotExist:
             return Response(status=status.HTTP_400_BAD_REQUEST)
 
-        serializer = StockSerializer(stock_product)
+        serializer = StockProductSerializer(stock_product)
         return Response(serializer.data)
 
-    @action(detail=True, methods=['post'])
+    @action(detail=False, methods=['post'])
     def remove_product(self, request):
         stock_id = request.data.get('stock_id')
         product_id = request.data.get('product_id')
