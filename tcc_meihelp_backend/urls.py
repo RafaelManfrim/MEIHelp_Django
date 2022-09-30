@@ -7,6 +7,7 @@ from tcc_meihelp_backend.activities.API.viewsets import ActivityViewset
 from tcc_meihelp_backend.companies.API.viewsets import CNPJViewset, CompanyViewset, CompanyTokenObtainPairView
 from tcc_meihelp_backend.inventory.API.viewsets import InventoryViewset, ProductViewset, ProviderViewset, \
     StockProductViewset
+from tcc_meihelp_backend.taxes.API.viewsets import DASViewset
 from tcc_meihelp_backend.trainings.API.viewsets import TrainingViewset
 
 router = routers.SimpleRouter()
@@ -18,7 +19,7 @@ router.register(r'stocks', InventoryViewset, basename='Stock')
 router.register(r'products', ProductViewset, basename='Product')
 router.register(r'providers', ProviderViewset, basename='Provider')
 router.register(r'stock_product', StockProductViewset, basename='StockProduct')
-# router.register(r'das')
+router.register(r'das', DASViewset, basename='DAS')
 # router.register(r'dre')
 # router.register(r'cashflow')
 # router.register(r'reports')

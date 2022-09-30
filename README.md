@@ -78,7 +78,14 @@
 - [X] Deverá ser possível adicionar e remover produtos de um estoque
 - [X] Deverá ser possível listar os produtos cadastrados por uma empresa
 - [X] Deverá ser possível modificar a quantidade de um produto do estoque
-- [ ] Deverá ser possível cadastrar e remover fornecedores de um produto
+- [X] Deverá ser possível cadastrar e remover fornecedores de um produto
 - [X] Deverá ser possivel listar os fornecedores
 - [X] Deverá ser possível editar os dados de um fornecedor
 - [X] Deverá ser possível excluir um fornecedor
+
+
+## DAS
+
+- [X] O usuário deverá poder ver seus DAS
+- [X] A requisição ao InfoSimples, salvará todo o histórico de DAS no banco
+- [X] Antes de fazer a requisição ao InfoSimples, verificará se o DAS está presente no banco, caso esteja, não fará a requisição, caso esteja a mais de um dia, fará uma nova requisição e atualizará todos os dados
