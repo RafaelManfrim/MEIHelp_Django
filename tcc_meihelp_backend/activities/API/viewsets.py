@@ -40,13 +40,19 @@ class ActivityViewset(viewsets.ModelViewSet):
 
         activity.save()
 
-        return Response(status=status.HTTP_201_CREATED)
+        serializer = ActivitySerializer(activity)
+
+        return Response(serializer.data, status=status.HTTP_201_CREATED)
 
     def retrieve(self, request, *args, **kwargs):
         return Response(status=status.HTTP_405_METHOD_NOT_ALLOWED)
 
     def update(self, request, *args, **kwargs):
         activity = self.get_object()
+
+        if activity.company_id != request.user.id:
+            return Response(status=status.HTTP_400_BAD_REQUEST)
+
         if activity.finished:
             return Response(status=status.HTTP_400_BAD_REQUEST)
 
@@ -63,10 +69,16 @@ class ActivityViewset(viewsets.ModelViewSet):
         activity.updated_at = datetime.now()
         activity.save()
 
-        return Response(status=status.HTTP_200_OK)
+        serializer = ActivitySerializer(activity)
+
+        return Response(serializer.data, status=status.HTTP_200_OK)
 
     def partial_update(self, request, *args, **kwargs):
         activity = self.get_object()
+
+        if activity.company_id != request.user.id:
+            return Response(status=status.HTTP_400_BAD_REQUEST)
+
         if activity.finished:
             return Response(status=status.HTTP_400_BAD_REQUEST)
         activity.finished = True
@@ -79,7 +91,7 @@ class ActivityViewset(viewsets.ModelViewSet):
     def destroy(self, request, *args, **kwargs):
         activity = self.get_object()
 
-        if activity.company_id != request.user:
+        if activity.company_id != request.user.id:
             return Response(status=status.HTTP_400_BAD_REQUEST)
 
         activity.delete()
