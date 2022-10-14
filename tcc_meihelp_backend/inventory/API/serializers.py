@@ -6,15 +6,16 @@ from tcc_meihelp_backend.inventory.models import Stock, Product, Provider, Stock
 class ProviderSerializer(serializers.ModelSerializer):
     class Meta:
         model = Provider
-        fields = '__all__'
+        fields = ['id', 'name', 'email', 'phone']
 
 
 class ProductSerializer(serializers.ModelSerializer):
     providers = ProviderSerializer(many=True)
+    category = serializers.CharField(source='category_label')
 
     class Meta:
         model = Product
-        fields = '__all__'
+        fields = ['id', 'name', 'category', 'description', 'providers']
 
 
 class StockProductSerializer(serializers.ModelSerializer):

@@ -30,7 +30,9 @@ class ProductCategory(BetterChoices):
     Bebidas = 5, 'Bebidas'
     Tecnologia = 6, 'Tecnologia'
     Brinquedos = 7, 'Brinquedos'
-    Outros = 8, 'Outros'
+    MateriaPrima = 8, 'Matéria-prima'
+    Ferramentas = 9, 'Ferramentas'
+    Outros = 10, 'Outros'
 
 
 class Stock(models.Model):
@@ -49,6 +51,10 @@ class Product(models.Model):
     description = models.TextField(max_length=100)
     created_by = models.ForeignKey(Company, on_delete=models.CASCADE)
     providers = models.ManyToManyField('Provider', through='ProviderProducts')
+
+    @property
+    def category_label(self):
+        return ProductCategory.getLabel(self.category)
 
     def __str__(self):
         return self.name + ' - ' + ProductCategory(self.category).label
