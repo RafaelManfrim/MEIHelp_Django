@@ -126,8 +126,11 @@ class ProductViewset(viewsets.ModelViewSet):
 
 
 class ProviderViewset(viewsets.ModelViewSet):
-    queryset = Provider.objects.all()
     serializer_class = ProviderSerializer
+
+    def get_queryset(self):
+        company = self.request.user
+        return Provider.objects.filter(created_by=company.id)
 
 
 class StockProductViewset(viewsets.ViewSet):
