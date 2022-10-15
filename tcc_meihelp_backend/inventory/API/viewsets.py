@@ -132,6 +132,26 @@ class ProviderViewset(viewsets.ModelViewSet):
         company = self.request.user
         return Provider.objects.filter(created_by=company.id)
 
+    def create(self, request, *args, **kwargs):
+        company = request.user
+        name = request.data.get('name')
+        email = request.data.get('email')
+        phone = request.data.get('phone')
+
+        if not name or not email or not phone:
+            return Response(status=status.HTTP_400_BAD_REQUEST)
+
+        provider = {
+            'name': name,
+            'email': email,
+            'phone': phone,
+            'created_by': company,
+        }
+
+        provider = Provider.objects.create(**provider)
+        serializer = ProviderSerializer(provider)
+        return Response(serializer.data)
+
 
 class StockProductViewset(viewsets.ViewSet):
     @action(detail=False, methods=['post'])

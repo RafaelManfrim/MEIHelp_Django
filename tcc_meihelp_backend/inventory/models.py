@@ -54,7 +54,8 @@ class Product(models.Model):
 
     @property
     def category_label(self):
-        return ProductCategory.getLabel(self.category)
+        # return ProductCategory.getLabel(self.category)
+        return ProductCategory(self.category).label
 
     def __str__(self):
         return self.name + ' - ' + ProductCategory(self.category).label
