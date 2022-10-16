@@ -6,7 +6,8 @@ from rest_framework.response import Response
 
 from tcc_meihelp_backend.inventory.API.serializers import StockSerializer, ProductSerializer, ProviderSerializer, \
     StockProductSerializer
-from tcc_meihelp_backend.inventory.models import Stock, StockProduct, ProviderProducts, Product, Provider
+from tcc_meihelp_backend.inventory.models import Stock, StockProduct, ProviderProducts, Product, Provider, \
+    ProductCategory
 
 
 class InventoryViewset(viewsets.ModelViewSet):
@@ -123,6 +124,11 @@ class ProductViewset(viewsets.ModelViewSet):
         provider_products = ProviderProducts.objects.get(product=product, provider=provider)
         provider_products.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
+
+    @action(detail=False, methods=['get'])
+    def list_all_categories(self, request):
+        categories = [{"id": x[0], "categoria": x[1]} for x in ProductCategory.choices]
+        return Response(categories)
 
 
 class ProviderViewset(viewsets.ModelViewSet):
