@@ -196,7 +196,7 @@ class StockProductViewset(viewsets.ViewSet):
 
         try:
             stock_product = StockProduct.objects.get(stock=stock, product=product)
-            if stock_product.quantity - quantity < 0:
+            if stock_product.quantity - quantity < 1:
                 return Response(status=status.HTTP_400_BAD_REQUEST)
             stock_product.quantity -= quantity
             stock_product.save()
